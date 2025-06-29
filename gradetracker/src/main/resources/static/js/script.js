@@ -1,8 +1,19 @@
-$(document).ready(function() {
-    $("#addCourse").click(function() {
-        let index = $(".course-row").length;
-        let newRow = $(
-        `<div class="course-row row g-2 mb-2">
+window.addEventListener("DOMContentLoaded", function () {
+    console.log("script.js loaded");
+
+    const addBtn = document.getElementById("addCourse");
+    const container = document.getElementById("courseInputs");
+
+    if (!addBtn || !container) {
+        console.error("Missing #addCourse or #courseInputs in DOM");
+        return;
+    }
+
+    addBtn.addEventListener("click", function () {
+        const index = container.querySelectorAll(".course-row").length;
+        const newRow = document.createElement("div");
+        newRow.classList.add("course-row", "row", "g-2", "mb-2");
+        newRow.innerHTML = `
             <div class="col">
                 <input type="text" name="courseList[${index}].courseName" class="form-control" placeholder="Course Name (optional)">
             </div>
@@ -15,11 +26,14 @@ $(document).ready(function() {
             <div class="col-auto">
                 <button type="button" class="btn btn-danger remove-course">Delete</button>
             </div>
-        </div>`);
-        newRow.appendTo("#courseInputs");
+        `;
+        container.appendChild(newRow);
     });
 
-    $(document).on("click", ".remove-course", function() {
-        $(this).closest(".course-row").remove();
+    container.addEventListener("click", function (e) {
+        if (e.target.classList.contains("remove-course")) {
+            const row = e.target.closest(".course-row");
+            if (row) row.remove();
+        }
     });
 });
