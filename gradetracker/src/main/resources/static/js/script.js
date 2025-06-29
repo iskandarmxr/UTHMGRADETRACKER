@@ -1,8 +1,8 @@
 $(document).ready(function() {
     $("#addCourse").click(function() {
         let index = $(".course-row").length;
-        let newRow = `
-        <div class="course-row row g-2 mb-2">
+        let newRow = $(
+        `<div class="course-row row g-2 mb-2">
             <div class="col">
                 <input type="text" name="courseList[${index}].courseName" class="form-control" placeholder="Course Name (optional)">
             </div>
@@ -15,8 +15,8 @@ $(document).ready(function() {
             <div class="col-auto">
                 <button type="button" class="btn btn-danger remove-course">Delete</button>
             </div>
-        </div>`;
-        $("#courseInputs").append(newRow);
+        </div>`);
+        newRow.appendTo("#courseInputs");
     });
 
     $(document).on("click", ".remove-course", function() {
