@@ -1,32 +1,31 @@
 package com.uthm.gradetracker.controller;
 
+import com.uthm.gradetracker.model.TrackerForm;
 import com.uthm.gradetracker.model.CourseInput;
 import com.uthm.gradetracker.util.GradeUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 public class TrackerController {
+
     @GetMapping("/")
     public String showForm(Model model) {
-        model.addAttribute("courseList", List.of(new CourseInput(), new CourseInput(), new CourseInput(), new CourseInput(), new CourseInput()));
+        TrackerForm form = new TrackerForm();
+        for (int i = 0; i < 5; i++) {
+            form.getCourseList().add(new CourseInput());
+        }
+        model.addAttribute("trackerForm", form);
         return "tracker";
     }
 
     @PostMapping("/calculate")
-    public String calculate(
-        @RequestParam double totalCredits,
-        @RequestParam double currentCGPA,
-        @ModelAttribute("courseList") List<CourseInput> courseList,
-        Model model) {
-
+    public String calculate(@ModelAttribute TrackerForm trackerForm, Model model) {
         double semesterTotalPoints = 0.0;
         double semesterCreditHours = 0.0;
 
-        for (CourseInput course : courseList) {
+        for (CourseInput course : trackerForm.getCourseList()) {
             if (course.getGrade() != null && !course.getGrade().isEmpty()) {
                 double point = GradeUtil.getPoint(course.getGrade());
                 semesterTotalPoints += point * course.getCreditHour();
@@ -35,8 +34,8 @@ public class TrackerController {
         }
 
         double semesterGPA = semesterCreditHours > 0 ? semesterTotalPoints / semesterCreditHours : 0;
-        double newTotalCredits = totalCredits + semesterCreditHours;
-        double newTotalPoints = currentCGPA * totalCredits + semesterTotalPoints;
+        double newTotalCredits = trackerForm.getTotalCredits() + semesterCreditHours;
+        double newTotalPoints = trackerForm.getCurrentCGPA() * trackerForm.getTotalCredits() + semesterTotalPoints;
         double newCGPA = newTotalCredits > 0 ? newTotalPoints / newTotalCredits : 0;
 
         String standing;
@@ -52,7 +51,7 @@ public class TrackerController {
         model.addAttribute("newCGPA", newCGPA);
         model.addAttribute("newTotalCredits", newTotalCredits);
         model.addAttribute("standing", standing);
-        model.addAttribute("courseList", courseList);
+        model.addAttribute("trackerForm", trackerForm);
         return "tracker";
     }
 }

@@ -8,26 +8,26 @@
 </head>
 <body class="container mt-4">
 <h2>UTHM GPA/CGPA Tracker</h2>
-<form action="/calculate" method="post">
+<form th:action="@{/calculate}" th:object="${trackerForm}" method="post">
     <div class="mb-3">
         <label>Total Credit Hours Completed:</label>
-        <input type="number" name="totalCredits" class="form-control" step="0.01" required>
+        <input type="number" th:field="*{totalCredits}" class="form-control" step="0.01" required>
     </div>
     <div class="mb-3">
         <label>Current CGPA:</label>
-        <input type="number" name="currentCGPA" class="form-control" step="0.01" required>
+        <input type="number" th:field="*{currentCGPA}" class="form-control" step="0.01" required>
     </div>
 
     <div id="courseInputs">
-        <div th:each="course, stat : ${courseList}" class="course-row row g-2 mb-2">
+        <div th:each="course, stat : *{courseList}" class="course-row row g-2 mb-2">
             <div class="col">
-                <input type="text" th:name="|courseList[__${stat.index}__].courseName|" class="form-control" placeholder="Course Name (optional)">
+                <input type="text" th:field="*{courseList[__${stat.index}__].courseName}" class="form-control" placeholder="Course Name (optional)">
             </div>
             <div class="col">
-                <input type="text" th:name="|courseList[__${stat.index}__].grade|" class="form-control" placeholder="Grade (e.g. A, B+, etc)" required>
+                <input type="text" th:field="*{courseList[__${stat.index}__].grade}" class="form-control" placeholder="Grade (e.g. A, B+, etc)" required>
             </div>
             <div class="col">
-                <input type="number" th:name="|courseList[__${stat.index}__].creditHour|" class="form-control" placeholder="Credit Hour" step="0.5" required>
+                <input type="number" th:field="*{courseList[__${stat.index}__].creditHour}" class="form-control" placeholder="Credit Hour" step="0.5" required>
             </div>
             <div class="col-auto">
                 <button type="button" class="btn btn-danger remove-course">Delete</button>
