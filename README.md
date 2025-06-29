@@ -14,13 +14,6 @@ A full-stack web application built with Spring Boot and Thymeleaf that helps UTH
 
 ---
 
-## 📸 Screenshots
-
-<img src="screenshots/main-form.png" width="700">
-<img src="screenshots/result-section.png" width="700">
-
----
-
 ## 🧠 Use Case
 
 This application allows students to:
